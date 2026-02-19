@@ -8,7 +8,11 @@ import {
 } from "../../utils/response";
 
 /**
- * Handle user registration
+ * Register a new user account.
+ *
+ * @param req Express request containing validated registration input.
+ * @param res Express response used to return the created user payload.
+ * @returns A created response with the registration result.
  */
 export const handleSignUp = asyncHandler(
     async (req: Request, res: Response) => {
@@ -24,7 +28,11 @@ export const handleSignUp = asyncHandler(
 );
 
 /**
- * Handle user login
+ * Authenticate a user with email and password.
+ *
+ * @param req Express request containing validated login credentials.
+ * @param res Express response used to return the authenticated session.
+ * @returns A success response with the login result.
  */
 export const handleSignIn = asyncHandler(
     async (req: Request, res: Response) => {
@@ -41,7 +49,11 @@ export const handleSignIn = asyncHandler(
 );
 
 /**
- * Handle user logout
+ * Sign out the current authenticated user.
+ *
+ * @param req Express request containing authentication headers.
+ * @param res Express response used to confirm logout.
+ * @returns A success response with no payload.
  */
 export const handleSignOut = asyncHandler(
     async (req: Request, res: Response) => {
@@ -58,7 +70,12 @@ export const handleSignOut = asyncHandler(
 );
 
 /**
- * Handle getting current user info
+ * Return the currently authenticated session.
+ *
+ * @param req Express request containing authentication headers.
+ * @param res Express response used to return session data.
+ * @returns A success response with the current session.
+ * @throws AuthenticationError When no active session exists.
  */
 export const handleGetMe = asyncHandler(async (req: Request, res: Response) => {
     const session = await AuthService.getSession(req.headers);

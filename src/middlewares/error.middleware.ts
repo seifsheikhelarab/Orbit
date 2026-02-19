@@ -8,14 +8,13 @@ import {
 import logger from "../utils/logger.js";
 
 /**
- * Global Error Handler Middleware
- * Catches all errors and formats them consistently.
+ * Format and send a consistent error response for failed requests.
  *
- * @param {Error | AppError} err - The error object.
- * @param {Request} req - The Express request object.
- * @param {Response} res - The Express response object.
- * @param {NextFunction} _next - The Express next function.
- * @returns {Response} The JSON error response.
+ * @param err Thrown application, validation, or generic error.
+ * @param req Incoming Express request.
+ * @param res Outgoing Express response.
+ * @param _next Unused Express next function.
+ * @returns The serialized error response.
  */
 export const errorHandler = (
     err: Error | AppError,
@@ -48,12 +47,12 @@ export const errorHandler = (
 
         const details: Record<string, unknown> = Array.isArray(issues)
             ? issues.reduce((acc: Record<string, unknown>, error: any) => {
-                  const errorPath = Array.isArray(error.path)
-                      ? error.path.join(".")
-                      : error.path;
-                  acc[errorPath] = error.message;
-                  return acc;
-              }, {})
+                const errorPath = Array.isArray(error.path)
+                    ? error.path.join(".")
+                    : error.path;
+                acc[errorPath] = error.message;
+                return acc;
+            }, {})
             : { error: "Unknown validation error" };
 
         logger.warn(`Validation error - Path: ${path}`);
@@ -81,11 +80,10 @@ export const errorHandler = (
 };
 
 /**
- * 404 Not Found Middleware
- * Handles requests to non-existent routes.
+ * Return a standardized 404 response for unmatched routes.
  *
- * @param {Request} req - The Express request object.
- * @param {Response} res - The Express response object.
+ * @param req Incoming Express request.
+ * @param res Outgoing Express response.
  */
 export const notFoundHandler = (req: Request, res: Response) => {
     const path = `${req.method} ${req.path}`;
@@ -99,11 +97,10 @@ export const notFoundHandler = (req: Request, res: Response) => {
 };
 
 /**
- * Async handler wrapper for Express route handlers
- * Wraps async functions to catch errors and pass them to error handler.
+ * Wrap an async route handler and forward rejected promises to `next`.
  *
- * @param {Function} fn - The async route handler function.
- * @returns {Function} Express middleware function.
+ * @param fn Async Express handler to wrap.
+ * @returns Middleware that resolves the handler and forwards errors.
  */
 export const asyncHandler = (
     fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown>

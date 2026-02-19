@@ -11,7 +11,11 @@ import type { Request } from "express";
 
 export class AuthService {
     /**
-     * Sign up a new user
+     * Create a new user account using email/password credentials.
+     *
+     * @param data Validated registration payload.
+     * @returns The Better Auth sign-up result.
+     * @throws AppError When registration fails or the user already exists.
      */
     static async signUp(data: RegisterInput) {
         try {
@@ -45,7 +49,12 @@ export class AuthService {
     }
 
     /**
-     * Sign in an existing user
+     * Authenticate an existing user with email/password credentials.
+     *
+     * @param data Validated login payload.
+     * @returns The Better Auth sign-in result.
+     * @throws AuthenticationError When credentials are invalid.
+     * @throws AppError When sign-in fails for other reasons.
      */
     static async signIn(data: LoginInput) {
         try {
@@ -74,7 +83,11 @@ export class AuthService {
     }
 
     /**
-     * Sign out the current user
+     * Revoke the current authenticated session.
+     *
+     * @param headers Request headers containing session credentials.
+     * @returns A promise that resolves when sign-out succeeds.
+     * @throws AppError When sign-out fails.
      */
     static async signOut(headers: Request["headers"]) {
         try {
@@ -91,7 +104,10 @@ export class AuthService {
     }
 
     /**
-     * Get current user session
+     * Fetch the current authenticated session.
+     *
+     * @param headers Request headers containing session credentials.
+     * @returns The active session or `null` when session retrieval fails.
      */
     static async getSession(headers: Request["headers"]) {
         try {

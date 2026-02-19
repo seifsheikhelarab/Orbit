@@ -3,12 +3,11 @@ import { errorHandler } from "./error.middleware.js";
 import type { z } from "better-auth";
 
 /**
- * Validation Middleware Factory
- * Creates a middleware that validates request body, query, or params using Zod.
+ * Create middleware that validates request input against a Zod schema.
  *
- * @param {ZodSchema} schema - The Zod schema to validate against.
- * @param {"body" | "query" | "params"} source - The part of the request to validate (default: "body").
- * @returns {Function} Express middleware function.
+ * @param schema Zod schema used to parse and validate input.
+ * @param source Request source to validate: body, query, or params.
+ * @returns Middleware that validates and normalizes request data.
  */
 export const validateRequest = (
     schema: z.ZodType,
@@ -20,13 +19,13 @@ export const validateRequest = (
                 source === "body"
                     ? req.body
                     : source === "query"
-                      ? req.query
-                      : req.params;
+                        ? req.query
+                        : req.params;
 
             const result = schema.safeParse(data);
 
             if (!result.success) {
-                errorHandler(result.error, req, res);
+                errorHandler(result.error, req, res, next);
                 return;
             }
 
@@ -49,7 +48,7 @@ export const validateRequest = (
 
             next();
         } catch (err) {
-            errorHandler(err as Error, req, res);
+            errorHandler(err as Error, req, res, next);
             return;
         }
     };

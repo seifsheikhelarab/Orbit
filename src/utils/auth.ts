@@ -23,11 +23,10 @@ export const auth = betterAuth({
 });
 
 /**
- * BetterAuth get Context
+ * Retrieve the current authentication session from request headers.
  *
- * @async
- * @param {Request["headers"]} headers
- * @returns {unknown}
+ * @param headers Request headers containing authentication credentials.
+ * @returns The resolved session payload from Better Auth.
  */
 export const getAuthContext = async (headers: Request["headers"]) => {
     const session = await auth.api.getSession({

@@ -17,7 +17,7 @@ const app: Application = express();
  *
  * @type {number}
  */
-const port = process.env.PORT || 5726;
+const port: string | number = process.env.PORT || 5726;
 
 import { errorHandler, notFoundHandler } from "./middlewares/error.middleware";
 
@@ -34,11 +34,9 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 /**
- * Server to run express app
+ * Start the Express server after verifying database connectivity.
  *
- * @export
- * @async
- * @returns {Promise<void>}
+ * @returns A promise that resolves after startup hooks are registered.
  */
 export async function startServer(): Promise<void> {
     try {

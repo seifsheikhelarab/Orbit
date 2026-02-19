@@ -62,6 +62,16 @@ export interface ErrorResponse {
 }
 
 export class ResponseHandler {
+    /**
+     * Send a standardized success response.
+     *
+     * @param res Express response object.
+     * @param message Human-readable success message.
+     * @param status HTTP status code to send.
+     * @param data Optional response payload.
+     * @param path Optional request path metadata.
+     * @returns The serialized success response.
+     */
     static success<T>(
         res: Response,
         message: string,
@@ -80,6 +90,17 @@ export class ResponseHandler {
         return res.status(status).json(response);
     }
 
+    /**
+     * Send a standardized error response.
+     *
+     * @param res Express response object.
+     * @param message Human-readable error message.
+     * @param code Application-specific error code.
+     * @param status HTTP status code to send.
+     * @param path Optional request path metadata.
+     * @param details Optional structured error details.
+     * @returns The serialized error response.
+     */
     static error(
         res: Response,
         message: string,
@@ -102,6 +123,18 @@ export class ResponseHandler {
         return res.status(status).json(response);
     }
 
+    /**
+     * Send a paginated success response with paging metadata.
+     *
+     * @param res Express response object.
+     * @param data List of items for the current page.
+     * @param message Human-readable success message.
+     * @param page Current page number.
+     * @param limit Maximum items per page.
+     * @param total Total number of items across all pages.
+     * @param path Optional request path metadata.
+     * @returns The serialized paginated response.
+     */
     static paginated<T>(
         res: Response,
         data: T[],
@@ -132,6 +165,15 @@ export class ResponseHandler {
         return res.status(HttpStatus.OK).json(response);
     }
 
+    /**
+     * Send a created response using the standard success envelope.
+     *
+     * @param res Express response object.
+     * @param message Human-readable creation message.
+     * @param data Created resource payload.
+     * @param path Optional request path metadata.
+     * @returns The serialized created response.
+     */
     static created<T>(
         res: Response,
         message: string,
@@ -147,6 +189,14 @@ export class AppError extends Error {
     public code: ErrorCode | string;
     public details?: Record<string, unknown>;
 
+    /**
+     * Create a typed application error with HTTP metadata.
+     *
+     * @param message Human-readable error message.
+     * @param status HTTP status associated with the error.
+     * @param code Application-specific error code.
+     * @param details Optional structured details for debugging or clients.
+     */
     constructor(
         message: string,
         status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
@@ -162,6 +212,13 @@ export class AppError extends Error {
 }
 
 export class AuthenticationError extends AppError {
+    /**
+     * Create an authentication-specific application error.
+     *
+     * @param message Human-readable authentication error message.
+     * @param status HTTP status associated with authentication failures.
+     * @param code Application-specific authentication error code.
+     */
     constructor(
         message: string = "Invalid credentials",
         status: HttpStatus = HttpStatus.UNAUTHORIZED,
@@ -173,6 +230,13 @@ export class AuthenticationError extends AppError {
 }
 
 export class AuthorizationError extends AppError {
+    /**
+     * Create an authorization-specific application error.
+     *
+     * @param message Human-readable authorization error message.
+     * @param status HTTP status associated with authorization failures.
+     * @param code Application-specific authorization error code.
+     */
     constructor(
         message: string = "Insufficient permissions",
         status: HttpStatus = HttpStatus.FORBIDDEN,
@@ -184,6 +248,13 @@ export class AuthorizationError extends AppError {
 }
 
 export class NotFoundError extends AppError {
+    /**
+     * Create a resource-not-found application error.
+     *
+     * @param message Human-readable not-found error message.
+     * @param status HTTP status associated with missing resources.
+     * @param code Application-specific not-found error code.
+     */
     constructor(
         message: string = "Resource not found",
         status: HttpStatus = HttpStatus.NOT_FOUND,
