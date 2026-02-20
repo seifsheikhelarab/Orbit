@@ -5,6 +5,8 @@ import { auth } from "./utils/auth";
 import logger from "./utils/logger";
 import prisma from "./utils/prisma";
 import authRouter from "./api/auth/auth.routes";
+import { errorHandler, notFoundHandler } from "./middlewares/error.middleware";
+import apiRouter from "./api";
 
 /**
  * Default Express app
@@ -19,8 +21,6 @@ const app: Application = express();
  */
 const port: string | number = process.env.PORT || 5726;
 
-import { errorHandler, notFoundHandler } from "./middlewares/error.middleware";
-
 // Express middleware initialization
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
@@ -28,6 +28,9 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 // BetterAuth
 app.use("/api/auth", authRouter);
 app.all("/api/auth/*splat", toNodeHandler(auth));
+
+// Application routes
+app.use("/api", apiRouter);
 
 // Error handling
 app.use(notFoundHandler);

@@ -16,7 +16,7 @@ const config: Partial<TypeDocOptions & { themeColor: string }> = {
         "src/generated"
     ],
     plugin: ["typedoc-material-theme"],
-    themeColor: "#187258"
+    themeColor: "#0655ff"
 };
 
 export default config;

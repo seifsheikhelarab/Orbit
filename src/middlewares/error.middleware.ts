@@ -47,12 +47,12 @@ export const errorHandler = (
 
         const details: Record<string, unknown> = Array.isArray(issues)
             ? issues.reduce((acc: Record<string, unknown>, error: any) => {
-                const errorPath = Array.isArray(error.path)
-                    ? error.path.join(".")
-                    : error.path;
-                acc[errorPath] = error.message;
-                return acc;
-            }, {})
+                  const errorPath = Array.isArray(error.path)
+                      ? error.path.join(".")
+                      : error.path;
+                  acc[errorPath] = error.message;
+                  return acc;
+              }, {})
             : { error: "Unknown validation error" };
 
         logger.warn(`Validation error - Path: ${path}`);
